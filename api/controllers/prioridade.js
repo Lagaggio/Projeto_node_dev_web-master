@@ -7,6 +7,8 @@ module.exports = app => {
         const desc = req.body.descricao;
         
         app.db.none(`INSERT INTO public.prioridade (descricao) VALUES ('${desc}')`).then(data => {
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
             res.status(200).json("Priority created!")
         }).catch(function (err){
             return next(err);
@@ -15,8 +17,11 @@ module.exports = app => {
     }
 
     controller.putPrioridade = function (req, res, next) {
+        let { id, novadesc } = req.body;
         
-        app.db.none(`UPDATE public.prioridade SET descricao = '${req.body.descricao}' WHERE id = ${req.query.id}`).then(data => {
+        app.db.none(`UPDATE public.prioridade SET descricao = '${novadesc}' WHERE id = ${id}`).then(data => {
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
             res.status(200).json("Priority successfully edited!")
         }).catch(function (err){
             return next(err);
@@ -24,8 +29,12 @@ module.exports = app => {
     }
 
     controller.deletePrioridade = function (req, res, next) {
+        const id = req.query.id;
+
         if(req.query.id) {
-            app.db.any(`DELETE from public.prioridade WHERE id = ${req.query.id}`).then(data => {
+            app.db.any(`DELETE from public.prioridade WHERE id = ${id}`).then(data => {
+                res.setHeader("Access-Control-Allow-Origin", "*");
+                res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
                 res.status(200).json("Priority successfully removed!");
             }).catch(function (err) {
                 return next(err);
@@ -39,6 +48,8 @@ module.exports = app => {
     controller.getPrioridade = function(req, res, next) {
         if(req.query.id) {
             app.db.any(`SELECT * from public.prioridade WHERE id = ${req.query.id}`).then(data => {
+                res.setHeader("Access-Control-Allow-Origin", "*");
+                res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
                 res.status(200).json(data);
             }).catch(function (err) {
                 return next(err);
@@ -46,6 +57,8 @@ module.exports = app => {
         }
         else {
             app.db.any('SELECT * from public.prioridade').then(data => {
+                res.setHeader("Access-Control-Allow-Origin", "*");
+                res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
                 res.status(200).json(data);
             }).catch(function (err) {
                 return next(err);

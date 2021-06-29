@@ -1,16 +1,16 @@
 module.exports = app => {
-    const controller = app.controllers.prioridade;
-    app.route('/prioridade')
+    const controller = app.controllers.grupo;
+    app.route('/grupo')
         .get(
-            controller.getPrioridade
+            controller.getGrupo
         )
         .post(
-            controller.createPrioridade
+            controller.createGrupo
         )
         .put(
-            controller.putPrioridade
+            controller.putGrupo
         )
         .delete(
-            controller.deletePrioridade
+            controller.deleteGrupo
         )
 }

@@ -8,9 +8,10 @@ module.exports = app => {
         const id_tarefa = req.body.id_tarefa;
         const desc = req.body.descricao;
         const id_pai_comentario = req.body.id_pai_comentario;
+        
 
         app.db.none(`INSERT INTO public.comentario (id_usuario, id_tarefa, descricao, created_at, id_pai_comentario) 
-        VALUES ('${id_usuario}', '${id_tarefa}', '${desc}', CURRENT_TIMESTAMP, '${id_pai_comentario}')`).then(data => {
+        VALUES (${id_usuario}, ${id_tarefa}, '${desc}', CURRENT_TIMESTAMP, ${id_pai_comentario})`).then(data => {
             res.setHeader("Access-Control-Allow-Origin", "*");
             res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
             res.status(200).json("Commented!")
@@ -21,13 +22,9 @@ module.exports = app => {
     }
 
     controller.putComentario = function (req, res, next) {
-        const id = req.query.id;
-        const id_usuario = req.body.id_usuario;
-        const id_tarefa = req.body.id_tarefa;
-        const desc = req.body.descricao;
-        const id_pai_comentario = req.body.id_pai_comentario;
+        let { id, id_usuario, id_tarefa, novadesc, id_pai_comentario}   = req.body;
 
-        app.db.none(`UPDATE public.comentario SET id_usuario = ${id_usuario}, id_tarefa = ${id_tarefa}, descricao = '${desc}', updated_at = '${updated_at}', 
+        app.db.none(`UPDATE public.comentario SET id_usuario = ${id_usuario}, id_tarefa = ${id_tarefa}, descricao = '${novadesc}', updated_at = CURRENT_TIMESTAMP, 
         id_pai_comentario = ${id_pai_comentario} WHERE id = ${id}`).then(data => {
             res.setHeader("Access-Control-Allow-Origin", "*");
             res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');

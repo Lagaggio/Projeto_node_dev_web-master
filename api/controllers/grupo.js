@@ -8,6 +8,8 @@ module.exports = app => {
         const id_projeto = req.body.id_projeto;
         
         app.db.none(`INSERT INTO public.grupo (id_projeto, descricao) VALUES (${id_projeto}, '${desc}')`).then(data => {
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
             res.status(200).json("Group created!")
         }).catch(function (err){
             return next(err);
@@ -16,11 +18,11 @@ module.exports = app => {
     }
 
     controller.putGrupo = function (req, res, next) {
-        const desc = req.body.descricao;
-        const id_projeto = req.body.id_projeto;
-        const id = req.body.id;
+        let { novadesc, id_projeto, id} = req.body;
         
-        app.db.none(`UPDATE public.grupo SET id_projeto = ${id_projeto}, descricao = '${desc}' WHERE id = ${id}`).then(data => {
+        app.db.none(`UPDATE public.grupo SET id_projeto = ${id_projeto}, descricao = '${novadesc}' WHERE id = ${id}`).then(data => {
+            res.setHeader("Access-Control-Allow-Origin", "*");
+            res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
             res.status(200).json("Group successfully edited!")
         }).catch(function (err){
             return next(err);
@@ -28,10 +30,12 @@ module.exports = app => {
     }
 
     controller.deleteGrupo = function (req, res, next) {
-        const id = req.body.id;
+        const id = req.query.id;
 
         if(id) {
             app.db.any(`DELETE from public.grupo WHERE id = ${id}`).then(data => {
+                res.setHeader("Access-Control-Allow-Origin", "*");
+                res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
                 res.status(200).json("Group successfully removed!");
             }).catch(function (err) {
                 return next(err);
@@ -43,10 +47,12 @@ module.exports = app => {
     }
 
     controller.getGrupo = function(req, res, next) {
-        const id = req.body.id;
+        const id = req.query.id;
 
         if(id) {
             app.db.any(`SELECT * from public.grupo WHERE id = ${id}`).then(data => {
+                res.setHeader("Access-Control-Allow-Origin", "*");
+                res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
                 res.status(200).json(data);
             }).catch(function (err) {
                 return next(err);
@@ -54,6 +60,8 @@ module.exports = app => {
         }
         else {
             app.db.any('SELECT * from public.grupo').then(data => {
+                res.setHeader("Access-Control-Allow-Origin", "*");
+                res.setHeader("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
                 res.status(200).json(data);
             }).catch(function (err) {
                 return next(err);
